@@ -14,19 +14,22 @@ namespace RaspBroadcastWCF
     public class Service1 : IService1
     {
 
-        private const string ConnectionString = "Data Source = dittessqlserver.database.windows.net;Initial Catalog = SchoolDB;Persist Security Info = False;User ID = ditteak; Password = Ditte1234;MultipleActiveResultSets = False;Encrypt = True;TrustServerCertificate = False;Connection Timeout = 30";
+        private const string ConnectionString = "Server=tcp:dittessqlserver.database.windows.net,1433;Initial Catalog=SchoolDB;Persist Security Info=False;User ID=ditteak;Password=Ditte1234;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout = 30;";
 
-        public string AddDACData(string StringText)
+
+        public int AddLys(string Lys)
         {
-            const string insertData = "insert into RaspString (StringText) values (@data)";
+            const string insertLys = "insert into RaspString (Lys) values (@Lys)";
 
             using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
             {
+               
                 databaseConnection.Open();
-                using (SqlCommand insertCommand = new SqlCommand(insertData, databaseConnection))
+                using (SqlCommand insertCommand = new SqlCommand(insertLys, databaseConnection))
                 {
-                    insertCommand.Parameters.AddWithValue(@StringText, StringText);
-                    return StringText;
+                    insertCommand.Parameters.AddWithValue("@Lys", Lys);
+                    int rowsAffected = insertCommand.ExecuteNonQuery();
+                    return rowsAffected;
                 }
             }
             

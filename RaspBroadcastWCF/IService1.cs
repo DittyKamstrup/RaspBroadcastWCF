@@ -14,7 +14,7 @@ namespace RaspBroadcastWCF
     {
 
         [OperationContract]
-        string AddDACData(string StringText);
+        int AddLys(string Lys);
 
 
         //[OperationContract]
