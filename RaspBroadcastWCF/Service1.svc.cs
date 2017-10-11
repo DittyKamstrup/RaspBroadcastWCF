@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -12,22 +13,42 @@ namespace RaspBroadcastWCF
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
-        public string GetData(int value)
+
+        private const string ConnectionString = "Data Source = dittessqlserver.database.windows.net;Initial Catalog = SchoolDB;Persist Security Info = False;User ID = ditteak; Password = Ditte1234;MultipleActiveResultSets = False;Encrypt = True;TrustServerCertificate = False;Connection Timeout = 30";
+
+        public string AddDACData(string StringText)
         {
-            return string.Format("You entered: {0}", value);
+            const string insertData = "insert into RaspString (StringText) values (@data)";
+
+            using (SqlConnection databaseConnection = new SqlConnection(ConnectionString))
+            {
+                databaseConnection.Open();
+                using (SqlCommand insertCommand = new SqlCommand(insertData, databaseConnection))
+                {
+                    insertCommand.Parameters.AddWithValue(@StringText, StringText);
+                    return StringText;
+                }
+            }
+            
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
-        {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
-        }
+        //public string GetData(int value)
+        //{
+        //    return string.Format("You entered: {0}", value);
+        //}
+
+        //public CompositeType GetDataUsingDataContract(CompositeType composite)
+        //{
+        //    if (composite == null)
+        //    {
+        //        throw new ArgumentNullException("composite");
+        //    }
+        //    if (composite.BoolValue)
+        //    {
+        //        composite.StringValue += "Suffix";
+        //    }
+        //    return composite;
+        //}
+
     }
 }
